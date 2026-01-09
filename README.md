@@ -1,1 +1,1 @@
-Hi, I’m Julian, an engineer and entrepreneur living in Bristol. I’m a co-founder of Forsyte, a modern compliance platform rethinking how law firms manage risk.
+Hi, I’m Julian, an engineer and entrepreneur living in Bristol. I’m a co-founder of [Forsyte](https://forsyte.co), a modern compliance platform rethinking how law firms manage risk.
