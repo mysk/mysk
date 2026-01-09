@@ -1,1 +1,1 @@
-Hi, I’m Julian Dawson and I build legal tech. I’m currently working on Forsyte, using modern tools to rethink how law firms manage risk.
+Hi, I’m Julian, an engineer and entrepreneur living in Bristol. I’m a co-founder of Forsyte, a modern compliance platform rethinking how law firms manage risk.
