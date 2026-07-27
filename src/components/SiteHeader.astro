@@ -1,0 +1,28 @@
+---
+const navItems = [
+	{ href: "/#work", label: "Work" },
+	{ href: "/#writing", label: "Writing" },
+	{ href: "/#about", label: "Approach" },
+	{ href: "/#contact", label: "Contact" },
+];
+---
+
+<header
+	class="grid grid-cols-[1fr_auto] items-center border-b border-line px-[var(--spacing-gutter)] py-[18px]"
+>
+	<a
+		href="/"
+		class="font-mono text-mono-label font-medium uppercase tracking-[0.09em] text-fg"
+	>
+		MYSK®
+	</a>
+	<nav class="flex gap-[18px]" aria-label="Primary navigation">
+		{
+			navItems.map((item) => (
+				<a href={item.href} class="nav-link">
+					{item.label}
+				</a>
+			))
+		}
+	</nav>
+</header>

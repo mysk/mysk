@@ -1,0 +1,118 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getProjectUrl } from "../lib/utils";
+
+interface Props {
+	projects: CollectionEntry<"projects">[];
+}
+
+const { projects } = Astro.props;
+
+const tintClass: Record<CollectionEntry<"projects">["data"]["tint"], string> = {
+	periwinkle: "bg-tint-periwinkle",
+	sage: "bg-tint-sage",
+	peach: "bg-tint-peach",
+	butter: "bg-tint-butter",
+	lilac: "bg-tint-lilac",
+};
+
+function padIndex(index: number): string {
+	return String(index + 1).padStart(2, "0");
+}
+
+function yearOf(date: Date): string {
+	return String(date.getFullYear());
+}
+---
+
+<div class="border-t border-line">
+	{
+		projects.map((project, index) => {
+			const href = getProjectUrl(project);
+			if (!href) return null;
+			return (
+				<a
+					class:list={["project-row", { active: index === 0 }]}
+					href={href}
+					target="_blank"
+					rel="noreferrer"
+					data-project={index}
+				>
+					<span class="font-mono text-[11px] uppercase tracking-[0.11em]">
+						{padIndex(index)}
+					</span>
+					<span class="project-name">{project.data.title}</span>
+					<span class="project-meta text-right font-mono text-[11px] uppercase tracking-[0.11em]">
+						{project.data.discipline} · {yearOf(project.data.date)}
+					</span>
+				</a>
+			);
+		})
+	}
+</div>
+
+<div class="preview-stage" aria-live="polite" data-preview-stage>
+	{
+		projects.map((project, index) => (
+			<article
+				class:list={["preview", { active: index === 0 }]}
+				data-preview={index}
+			>
+				<div class:list={["preview-visual", tintClass[project.data.tint]]}>
+					<div class="lettermark">{project.data.lettermark}</div>
+				</div>
+				<div class="preview-copy">
+					<p>{project.data.summary}</p>
+					<div class="mt-8 grid gap-3">
+						{project.data.facts.map((fact) => (
+							<div class="fact">
+								<span>{fact.label}</span>
+								<span>{fact.value}</span>
+							</div>
+						))}
+					</div>
+				</div>
+			</article>
+		))
+	}
+	<div class="follow-cursor" data-follow-cursor aria-hidden="true">Visit ↗</div>
+</div>
+
+<script>
+	const stage = document.querySelector<HTMLElement>("[data-preview-stage]");
+	if (stage) {
+		const rows = [
+			...document.querySelectorAll<HTMLAnchorElement>("[data-project]"),
+		];
+		const previews = [
+			...stage.querySelectorAll<HTMLElement>("[data-preview]"),
+		];
+		const cursor = stage.querySelector<HTMLElement>("[data-follow-cursor]");
+
+		function activate(index: number) {
+			rows.forEach((row, i) => row.classList.toggle("active", i === index));
+			previews.forEach((preview, i) =>
+				preview.classList.toggle("active", i === index)
+			);
+		}
+
+		rows.forEach((row) => {
+			const index = Number(row.dataset.project);
+			row.addEventListener("mouseenter", () => activate(index));
+			row.addEventListener("focus", () => activate(index));
+		});
+
+		if (cursor) {
+			stage.addEventListener("mousemove", (event) => {
+				const rect = stage.getBoundingClientRect();
+				cursor.style.left = `${event.clientX - rect.left}px`;
+				cursor.style.top = `${event.clientY - rect.top}px`;
+				cursor.classList.add("visible");
+			});
+
+			stage.addEventListener("mouseleave", () => {
+				cursor.classList.remove("visible");
+			});
+		}
+	}
+</script>

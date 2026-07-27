@@ -1,0 +1,47 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Ticker from "../components/Ticker.astro";
+import SectionHead from "../components/SectionHead.astro";
+import ProjectShowcase from "../components/ProjectShowcase.astro";
+import WritingList from "../components/WritingList.astro";
+import ApproachPanel from "../components/ApproachPanel.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects")).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const posts = (await getCollection("blog"))
+	.filter((post) => !post.data.draft)
+	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const workYears =
+	projects.length > 0
+		? `${projects[projects.length - 1].data.date.getFullYear()}—${projects[0].data.date.getFullYear()}`
+		: "";
+---
+
+<Layout
+	title="Julian Dawson — MYSK"
+	description="Engineer and founder. Co-Founder and Head of Engineering at Forsyte. Based in Bristol."
+>
+	<Hero />
+	<Ticker />
+
+	<section id="work" class="scroll-mt-20">
+		<SectionHead num="01 / Work" title="Selected projects" tag={workYears} />
+		<ProjectShowcase projects={projects} />
+	</section>
+
+	{
+		posts.length > 0 && (
+			<section id="writing" class="scroll-mt-20">
+				<SectionHead num="02 / Writing" title="Notes & essays" />
+				<WritingList posts={posts} />
+			</section>
+		)
+	}
+
+	<ApproachPanel />
+</Layout>

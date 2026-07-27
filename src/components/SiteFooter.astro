@@ -1,0 +1,54 @@
+---
+import { getCollection } from "astro:content";
+
+const year = new Date().getFullYear();
+const CV_PATH = "/julian-dawson-cv.pdf";
+const EMAIL = "hello@mysk.dev";
+
+const links = (await getCollection("links")).sort(
+	(a, b) => (a.data.order ?? 999) - (b.data.order ?? 999)
+);
+
+const linkedin = links.find((link) => link.id === "linkedin");
+const github = links.find((link) => link.id === "github");
+const linkedinUrl = linkedin?.data.url ?? "https://www.linkedin.com/in/mysk/";
+---
+
+<footer id="contact" class="scroll-mt-20 px-[var(--spacing-gutter)] pb-6 pt-16">
+	<div
+		class="grid grid-cols-1 items-end gap-5 border-b border-line pb-14 sm:grid-cols-[1fr_auto]"
+	>
+		<h2
+			class="m-0 max-w-[720px] text-[length:var(--text-section)] font-medium leading-[0.9] tracking-[-0.055em]"
+		>
+			Have something worth building?
+		</h2>
+		<a class="round-button" href={linkedinUrl} target="_blank" rel="noreferrer">
+			Start a<br />conversation ↗
+		</a>
+	</div>
+
+	<div
+		class="flex flex-col gap-[18px] pt-[17px] font-mono text-mono-label uppercase tracking-[0.1em] text-fg sm:flex-row sm:justify-between"
+	>
+		<a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+		<span class="flex flex-wrap gap-x-3 gap-y-1">
+			{
+				github && (
+					<a href={github.data.url} target="_blank" rel="noreferrer">
+						GitHub
+					</a>
+				)
+			}
+			{
+				linkedin && (
+					<a href={linkedin.data.url} target="_blank" rel="noreferrer">
+						LinkedIn
+					</a>
+				)
+			}
+			<a href={CV_PATH}>CV ↗</a>
+		</span>
+		<span>© {year}</span>
+	</div>
+</footer>

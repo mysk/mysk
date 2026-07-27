@@ -1,0 +1,47 @@
+---
+import { Font } from "astro:assets";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import NoiseOverlay from "../components/NoiseOverlay.astro";
+import "../styles/global.css";
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = "Julian Dawson — MYSK",
+	description = "Engineer and founder. Co-Founder and Head of Engineering at Forsyte. Based in Bristol.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<title>{title}</title>
+		<Font cssVariable="--font-geist" preload />
+		<Font cssVariable="--font-jetbrains-mono" />
+	</head>
+	<body>
+		<div class="relative min-h-dvh overflow-hidden">
+			<NoiseOverlay />
+			<a
+				href="#main"
+				class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-fg focus:px-4 focus:py-2 focus:text-bg"
+			>
+				Skip to content
+			</a>
+			<SiteHeader />
+			<main id="main">
+				<slot />
+			</main>
+			<SiteFooter />
+		</div>
+	</body>
+</html>
