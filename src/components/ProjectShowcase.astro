@@ -23,96 +23,109 @@ function padIndex(index: number): string {
 function yearOf(date: Date): string {
 	return String(date.getFullYear());
 }
+
+const entries = projects.map((project) => ({
+	project,
+	href: getProjectUrl(project),
+}));
 ---
 
-<div class="border-t border-line">
-	{
-		projects.map((project, index) => {
-			const href = getProjectUrl(project);
-			if (!href) return null;
-			return (
-				<a
-					class:list={["project-row", { active: index === 0 }]}
-					href={href}
-					target="_blank"
-					rel="noreferrer"
-					data-project={index}
-				>
-					<span class="font-mono text-[11px] uppercase tracking-[0.11em]">
-						{padIndex(index)}
-					</span>
-					<span class="project-name">{project.data.title}</span>
-					<span class="project-meta text-right font-mono text-[11px] uppercase tracking-[0.11em]">
-						{project.data.discipline} · {yearOf(project.data.date)}
-					</span>
-				</a>
-			);
-		})
-	}
-</div>
+{
+	entries.length > 0 ? (
+		<div class="project-showcase" data-project-showcase>
+			<nav class="project-nav" aria-label="Selected projects">
+				{entries.map(({ project, href }, index) =>
+					href ? (
+						<a
+							class:list={["project-link", { active: index === 0 }]}
+							href={href}
+							target="_blank"
+							rel="noreferrer"
+							data-project={index}
+						>
+							<span class="project-link-index">{padIndex(index)}</span>
+							<span class="project-link-name">{project.data.title}</span>
+							<span class="project-link-meta">
+								{project.data.discipline} · {yearOf(project.data.date)}
+							</span>
+						</a>
+					) : (
+						<button
+							class:list={["project-link", { active: index === 0 }]}
+							type="button"
+							data-project={index}
+						>
+							<span class="project-link-index">{padIndex(index)}</span>
+							<span class="project-link-name">{project.data.title}</span>
+							<span class="project-link-meta">
+								{project.data.discipline} · {yearOf(project.data.date)}
+							</span>
+						</button>
+					)
+				)}
+			</nav>
 
-<div class="preview-stage" aria-live="polite" data-preview-stage>
-	{
-		projects.map((project, index) => (
-			<article
-				class:list={["preview", { active: index === 0 }]}
-				data-preview={index}
-			>
-				<div class:list={["preview-visual", tintClass[project.data.tint]]}>
-					<div class="lettermark">{project.data.lettermark}</div>
-				</div>
-				<div class="preview-copy">
-					<p>{project.data.summary}</p>
-					<div class="mt-8 grid gap-3">
-						{project.data.facts.map((fact) => (
-							<div class="fact">
-								<span>{fact.label}</span>
-								<span>{fact.value}</span>
+			<div class="project-panels" aria-live="polite">
+				{entries.map(({ project, href }, index) => (
+					<article
+						class:list={["project-panel", { active: index === 0 }]}
+						data-preview={index}
+					>
+						<div class:list={["preview-visual", tintClass[project.data.tint]]}>
+							<div class="lettermark">{project.data.lettermark}</div>
+						</div>
+						<div class="preview-copy">
+							<div>
+								<p class="preview-kicker">
+									{padIndex(index)} / {project.data.title}
+								</p>
+								<p class="preview-summary">{project.data.summary}</p>
+								{href && (
+									<a
+										class="preview-visit"
+										href={href}
+										target="_blank"
+										rel="noreferrer"
+									>
+										Visit project <span aria-hidden="true">↗</span>
+									</a>
+								)}
 							</div>
-						))}
-					</div>
-				</div>
-			</article>
-		))
-	}
-	<div class="follow-cursor" data-follow-cursor aria-hidden="true">Visit ↗</div>
-</div>
+							<div class="preview-facts">
+								{project.data.facts.map((fact) => (
+									<div class="fact">
+										<span>{fact.label}</span>
+										<span>{fact.value}</span>
+									</div>
+								))}
+							</div>
+						</div>
+					</article>
+				))}
+			</div>
+		</div>
+	) : (
+		<p class="border-t border-line px-[var(--spacing-gutter)] py-10 text-fg-muted">
+			No projects yet.
+		</p>
+	)
+}
 
 <script>
-	const stage = document.querySelector<HTMLElement>("[data-preview-stage]");
-	if (stage) {
-		const rows = [
-			...document.querySelectorAll<HTMLAnchorElement>("[data-project]"),
-		];
-		const previews = [
-			...stage.querySelectorAll<HTMLElement>("[data-preview]"),
-		];
-		const cursor = stage.querySelector<HTMLElement>("[data-follow-cursor]");
+	const root = document.querySelector<HTMLElement>("[data-project-showcase]");
+	if (root) {
+		const links = [...root.querySelectorAll<HTMLElement>("[data-project]")];
+		const panels = [...root.querySelectorAll<HTMLElement>("[data-preview]")];
 
 		function activate(index: number) {
-			rows.forEach((row, i) => row.classList.toggle("active", i === index));
-			previews.forEach((preview, i) =>
-				preview.classList.toggle("active", i === index)
-			);
+			links.forEach((link, i) => link.classList.toggle("active", i === index));
+			panels.forEach((panel, i) => panel.classList.toggle("active", i === index));
 		}
 
-		rows.forEach((row) => {
-			const index = Number(row.dataset.project);
-			row.addEventListener("mouseenter", () => activate(index));
-			row.addEventListener("focus", () => activate(index));
+		links.forEach((link) => {
+			const index = Number(link.dataset.project);
+			link.addEventListener("mouseenter", () => activate(index));
+			link.addEventListener("focus", () => activate(index));
 		});
-
-		if (cursor) {
-			stage.addEventListener("mousemove", (event) => {
-				const rect = stage.getBoundingClientRect();
-				cursor.style.left = `${event.clientX - rect.left}px`;
-				cursor.style.top = `${event.clientY - rect.top}px`;
-				cursor.classList.add("visible");
-			});
-
-			stage.addEventListener("mouseleave", () => {
-				cursor.classList.remove("visible");
-			});
-		}
 	}
 </script>

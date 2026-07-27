@@ -40,7 +40,7 @@
 	--text-section: clamp(44px, 7vw, 90px);
 	--text-project: clamp(28px, 5vw, 64px);
 	--text-statement: clamp(34px, 5.7vw, 74px);
-	--text-lettermark: clamp(160px, 25vw, 340px);
+	--text-lettermark: clamp(140px, 18vw, 260px);
 	--text-body-lg: 1.125rem;
 	--text-body-md: 1rem;
 	--text-mono-label: 0.6875rem;
@@ -147,92 +147,164 @@
 		margin-right: 48px;
 	}
 
-	.project-row {
+	.project-showcase {
 		display: grid;
-		grid-template-columns: 72px minmax(0, 1fr) 200px;
-		gap: 18px;
-		align-items: center;
+		grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.15fr) minmax(0, 1fr);
+		border-top: 1px solid var(--color-line);
+		border-bottom: 1px solid var(--color-line);
+		margin-bottom: 72px;
+		min-height: 520px;
+	}
+
+	.project-nav {
+		display: flex;
+		flex-direction: column;
+		border-right: 1px solid var(--color-line);
+	}
+
+	.project-link {
+		display: grid;
+		grid-template-columns: 2rem minmax(0, 1fr);
+		gap: 0.35rem 0.75rem;
+		align-items: baseline;
 		width: 100%;
-		padding: 19px var(--spacing-gutter);
+		padding: 1.1rem var(--spacing-gutter);
+		border: 0;
 		border-bottom: 1px solid var(--color-line);
 		background: transparent;
 		text-align: left;
+		cursor: pointer;
 		transition:
-			background 0.25s ease,
-			color 0.25s ease;
+			background 0.2s ease,
+			color 0.2s ease;
 	}
 
-	.project-row:hover,
-	.project-row.active {
+	.project-link:last-child {
+		border-bottom: 0;
+	}
+
+	.project-link:hover,
+	.project-link.active,
+	.project-link:focus-visible {
 		background: var(--color-fg);
 		color: var(--color-bg);
+		outline: none;
 	}
 
-	.project-name {
-		font-size: var(--text-project);
-		letter-spacing: -0.045em;
-		line-height: 1;
+	.project-link-index,
+	.project-link-meta {
+		font-family: var(--font-mono);
+		font-size: var(--text-mono-label);
 		font-weight: 500;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
 	}
 
-	.preview-stage {
+	.project-link-index {
+		grid-row: 1 / span 2;
+		align-self: center;
+	}
+
+	.project-link-name {
+		font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+		font-weight: 500;
+		letter-spacing: -0.04em;
+		line-height: 1.1;
+	}
+
+	.project-link-meta {
+		opacity: 0.7;
+	}
+
+	.project-panels {
 		position: relative;
-		margin: 0 var(--spacing-gutter) 72px;
-		min-height: 420px;
-		overflow: hidden;
+		grid-column: 2 / span 2;
+		display: grid;
+		grid-template-columns: 1.15fr 1fr;
+		min-height: 520px;
 		background: var(--color-stage);
 	}
 
-	.preview {
+	.project-panel {
 		position: absolute;
 		inset: 0;
 		display: grid;
-		grid-template-columns: 1.2fr 0.8fr;
+		grid-template-columns: 1.15fr 1fr;
 		opacity: 0;
-		transform: scale(1.03);
+		transform: scale(1.02);
 		transition:
-			opacity 0.45s ease,
-			transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+			opacity 0.4s ease,
+			transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
 		pointer-events: none;
 	}
 
-	.preview.active {
+	.project-panel.active {
 		opacity: 1;
 		transform: scale(1);
 		pointer-events: auto;
 	}
 
 	.preview-visual {
-		position: relative;
-		min-height: 420px;
 		display: grid;
 		place-items: center;
 		overflow: hidden;
+		padding: 1.5rem;
+		min-height: 100%;
 	}
 
 	.lettermark {
-		font-size: var(--text-lettermark);
-		line-height: 0.7;
+		font-size: clamp(120px, 14vw, 240px);
+		line-height: 0.9;
 		letter-spacing: -0.12em;
 		font-weight: 500;
-		transform: translateX(-5%);
 		color: var(--color-fg);
+		max-width: 100%;
+		white-space: nowrap;
 	}
 
 	.preview-copy {
 		background: var(--color-fg);
 		color: var(--color-bg);
-		padding: 34px;
+		padding: 2rem;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		gap: 2rem;
+		min-height: 100%;
 	}
 
-	.preview-copy p {
-		max-width: 320px;
+	.preview-kicker {
+		margin: 0 0 0.75rem;
+		font-family: var(--font-mono);
+		font-size: var(--text-mono-label);
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		opacity: 0.7;
+	}
+
+	.preview-summary {
 		margin: 0;
+		max-width: 22rem;
 		font-size: 1.125rem;
 		line-height: 1.4;
+	}
+
+	.preview-visit {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-top: 1.5rem;
+		padding-bottom: 0.25rem;
+		border-bottom: 1px solid currentColor;
+		font-family: var(--font-mono);
+		font-size: var(--text-mono-label);
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.preview-facts {
+		display: grid;
+		gap: 0.75rem;
 	}
 
 	.fact {
@@ -245,6 +317,13 @@
 		font-size: var(--text-mono-label);
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
+	}
+
+	.project-name {
+		font-size: var(--text-project);
+		letter-spacing: -0.045em;
+		line-height: 1;
+		font-weight: 500;
 	}
 
 	.writing-row {
@@ -286,43 +365,6 @@
 	.round-button:hover {
 		background: var(--color-accent);
 		transform: rotate(-8deg);
-	}
-
-	.follow-cursor {
-		position: absolute;
-		z-index: 20;
-		width: 70px;
-		height: 70px;
-		border-radius: 999px;
-		display: none;
-		place-items: center;
-		background: var(--color-accent);
-		color: var(--color-fg);
-		font-family: var(--font-mono);
-		font-size: 9px;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		pointer-events: none;
-		opacity: 0;
-		transform: translate(-50%, -50%) scale(0.7);
-		transition:
-			opacity 0.18s ease,
-			transform 0.18s ease;
-	}
-
-	@media (hover: hover) and (pointer: fine) {
-		.follow-cursor {
-			display: grid;
-		}
-
-		.preview-stage {
-			cursor: none;
-		}
-	}
-
-	.follow-cursor.visible {
-		opacity: 1;
-		transform: translate(-50%, -50%) scale(1);
 	}
 
 	.nav-link {
@@ -409,28 +451,42 @@
 		}
 	}
 
-	@media (max-width: 700px) {
-		.project-row {
-			grid-template-columns: 40px 1fr;
+	@media (max-width: 900px) {
+		.project-showcase {
+			grid-template-columns: 1fr;
+			min-height: 0;
 		}
 
-		.project-row .project-meta {
+		.project-nav {
+			border-right: 0;
+			border-bottom: 1px solid var(--color-line);
+		}
+
+		.project-link-meta {
 			display: none;
 		}
 
-		.preview {
+		.project-panels {
+			grid-column: auto;
 			grid-template-columns: 1fr;
+			min-height: 640px;
 		}
 
-		.preview-stage,
-		.preview-visual {
-			min-height: 650px;
+		.project-panel {
+			grid-template-columns: 1fr;
+			grid-template-rows: minmax(280px, 1fr) auto;
 		}
 
 		.preview-copy {
-			min-height: 250px;
+			min-height: 260px;
 		}
 
+		.lettermark {
+			font-size: clamp(100px, 28vw, 180px);
+		}
+	}
+
+	@media (max-width: 700px) {
 		.writing-row {
 			grid-template-columns: 1fr;
 			gap: 6px;
