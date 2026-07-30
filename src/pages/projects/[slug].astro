@@ -1,0 +1,29 @@
+---
+import EntryPage from "../../components/EntryPage.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+	const entries = (await getCollection("projects")).filter(
+		(entry) => !entry.data.draft
+	);
+	return entries.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<EntryPage
+	title={entry.data.title}
+	description={entry.data.description}
+	backHref="/#projects"
+	backLabel="Projects"
+	date={entry.data.date}
+	tags={entry.data.tags}
+	externalUrl={entry.data.externalUrl}
+>
+	<Content />
+</EntryPage>

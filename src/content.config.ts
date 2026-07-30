@@ -2,39 +2,29 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
-const blog = defineCollection({
-	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
-	schema: z.object({
-		title: z.string(),
-		description: z.string(),
-		date: z.coerce.date(),
-		tags: z.array(z.string()).default([]),
-		draft: z.boolean().default(false),
-	}),
+const entry = z.object({
+	title: z.string(),
+	description: z.string(),
+	date: z.coerce.date().optional(),
+	tags: z.array(z.string()).default([]),
+	externalUrl: z.url().optional(),
+	draft: z.boolean().default(false),
+});
+
+const work = defineCollection({
+	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/work" }),
+	schema: entry,
 });
 
 const projects = defineCollection({
 	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
-	schema: z.object({
-		title: z.string(),
-		summary: z.string(),
+	schema: entry,
+});
+
+const writing = defineCollection({
+	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/writing" }),
+	schema: entry.extend({
 		date: z.coerce.date(),
-		discipline: z.string(),
-		lettermark: z.string(),
-		tint: z.enum(["periwinkle", "sage", "peach", "butter", "lilac"]),
-		facts: z
-			.array(
-				z.object({
-					label: z.string(),
-					value: z.string(),
-				})
-			)
-			.default([]),
-		role: z.string().optional(),
-		tech: z.array(z.string()).default([]),
-		blogUrl: z.url().optional(),
-		githubUrl: z.url().optional(),
-		externalUrl: z.url().optional(),
 	}),
 });
 
@@ -50,4 +40,4 @@ const links = defineCollection({
 	}),
 });
 
-export const collections = { blog, projects, links };
+export const collections = { work, projects, writing, links };

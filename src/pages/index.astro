@@ -1,47 +1,111 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
-import Ticker from "../components/Ticker.astro";
-import SectionHead from "../components/SectionHead.astro";
-import ProjectShowcase from "../components/ProjectShowcase.astro";
-import WritingList from "../components/WritingList.astro";
-import ApproachPanel from "../components/ApproachPanel.astro";
+import Section from "../components/Section.astro";
 import { getCollection } from "astro:content";
 
-const projects = (await getCollection("projects")).sort(
-	(a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
+const work = (await getCollection("work"))
+	.filter((entry) => !entry.data.draft)
+	.sort(
+		(a, b) =>
+			(b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0)
+	);
 
-const posts = (await getCollection("blog"))
-	.filter((post) => !post.data.draft)
+const projects = (await getCollection("projects"))
+	.filter((entry) => !entry.data.draft)
+	.sort(
+		(a, b) =>
+			(b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0)
+	);
+
+const externalProjects = [
+	{
+		title: "Adventurers' Record Keeper",
+		description: "Tools and resources for Final Fantasy XI players",
+		href: "https://ffxiark.com",
+	},
+];
+
+const posts = (await getCollection("writing"))
+	.filter((entry) => !entry.data.draft)
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-
-const workYears =
-	projects.length > 0
-		? `${projects[projects.length - 1].data.date.getFullYear()}—${projects[0].data.date.getFullYear()}`
-		: "";
 ---
 
 <Layout
-	title="Julian Dawson — MYSK"
+	title="Julian Dawson — Mysk"
 	description="Engineer and founder. Co-Founder and Head of Engineering at Forsyte. Based in Bristol."
 >
 	<Hero />
-	<Ticker />
-
-	<section id="work" class="scroll-mt-20">
-		<SectionHead num="01 / Work" title="Selected projects" tag={workYears} />
-		<ProjectShowcase projects={projects} />
-	</section>
 
 	{
-		posts.length > 0 && (
-			<section id="writing" class="scroll-mt-20">
-				<SectionHead num="02 / Writing" title="Notes & essays" />
-				<WritingList posts={posts} />
-			</section>
+		work.length > 0 && (
+			<Section id="work" label="Work">
+				<ul class="list">
+					{work.map((entry) => (
+						<li>
+							<a href={`/work/${entry.id}/`}>{entry.data.title}</a>
+						</li>
+					))}
+				</ul>
+			</Section>
 		)
 	}
 
-	<ApproachPanel />
+	{
+		projects.length > 0 && (
+			<Section id="projects" label="Projects">
+				<ul class="list">
+					{projects.map((entry) => (
+						<li class="entry">
+							<a href={`/projects/${entry.id}/`}>{entry.data.title}</a>
+							<span class="entry-desc">{entry.data.description}</span>
+						</li>
+					))}
+					{externalProjects.map((entry) => (
+						<li class="entry">
+							<a href={entry.href} target="_blank" rel="noreferrer">
+								<span class="link-text">{entry.title}</span>
+								<svg
+									class="ext"
+									viewBox="6 6 12 12"
+									fill="none"
+									aria-hidden="true"
+								>
+									<path
+										stroke="currentColor"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="1.8"
+										d="M17.25 15.25V6.75H8.75"
+									></path>
+									<path
+										stroke="currentColor"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="1.8"
+										d="M17 7L6.75 17.25"
+									></path>
+								</svg>
+							</a>
+							<span class="entry-desc">{entry.description}</span>
+						</li>
+					))}
+				</ul>
+			</Section>
+		)
+	}
+
+	{
+		posts.length > 0 && (
+			<Section id="writing" label="Writing">
+				<ul class="list">
+					{posts.map((entry) => (
+						<li>
+							<a href={`/writing/${entry.id}/`}>{entry.data.title}</a>
+						</li>
+					))}
+				</ul>
+			</Section>
+		)
+	}
 </Layout>

@@ -1,0 +1,65 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { formatBlogDate } from "../lib/utils";
+
+interface Props {
+	title: string;
+	description: string;
+	backHref: string;
+	backLabel: string;
+	date?: Date;
+	tags?: string[];
+	externalUrl?: string;
+}
+
+const {
+	title,
+	description,
+	backHref,
+	backLabel,
+	date,
+	tags = [],
+	externalUrl,
+} = Astro.props;
+---
+
+<Layout
+	title={`${title} — Mysk`}
+	description={description}
+	breadcrumb={{ label: backLabel, href: backHref }}
+>
+	<article class="article">
+		<header>
+			{
+				date && (
+					<p class="label">
+						<time datetime={date.toISOString()}>{formatBlogDate(date)}</time>
+					</p>
+				)
+			}
+			<h1 class="article-title mt-4">{title}</h1>
+			<p class="mt-5 text-fg-muted">{description}</p>
+			{
+				externalUrl && (
+					<p class="mt-4">
+						<a href={externalUrl} target="_blank" rel="noreferrer">
+							{externalUrl
+								.replace(/^https?:\/\/(www\.)?/, "")
+								.replace(/\/$/, "")}
+						</a>
+					</p>
+				)
+			}
+		</header>
+
+		<div class="prose mt-10">
+			<slot />
+		</div>
+
+		{
+			tags.length > 0 && (
+				<p class="label mt-14 border-t border-line pt-6">{tags.join(" · ")}</p>
+			)
+		}
+	</article>
+</Layout>

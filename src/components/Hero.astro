@@ -1,39 +1,27 @@
-<section
-	class="relative grid min-h-[660px] grid-cols-1 gap-6 border-b border-line px-[var(--spacing-gutter)] pb-[70px] pt-[42px] md:grid-cols-[minmax(0,1.55fr)_minmax(220px,0.45fr)] md:pb-7"
-	aria-labelledby="hero-title"
->
-	<div>
-		<p
-			class="mb-7 font-mono text-mono-label font-medium uppercase tracking-[0.12em] text-fg"
-		>
-			Engineer and founder · Bristol, UK
-		</p>
-		<h1
-			id="hero-title"
-			class="m-0 max-w-[930px] text-[length:var(--text-hero)] font-medium leading-[0.82] tracking-[-0.075em] max-md:text-[clamp(58px,20vw,100px)]"
-		>
-			I build<br />
-			<span class="text-outline">software</span><br />
-			people trust.
-		</h1>
-	</div>
+---
+import Section from "./Section.astro";
+---
 
-	<div class="self-end max-w-[350px] pb-2.5 max-md:ml-[20%]">
-		<p class="mb-[26px] text-lg leading-[1.35]">
-			Compliance and legal technology for firms that can't afford to get it
-			wrong. Currently co-founder and Head of Engineering at Forsyte.
-		</p>
-		<a
-			class="inline-flex items-center gap-3 border-b border-current pb-[5px] font-mono text-[13px] uppercase tracking-[0.1em] [&>span]:transition-transform [&>span]:duration-250 hover:[&>span]:translate-x-1.5"
-			href="#work"
-		>
-			Selected work <span>↗</span>
-		</a>
-	</div>
+<div class="pb-4 pt-8 md:pt-16">
+	<h1 class="text-title max-w-[19ch] text-balance leading-[1.15]">
+		I build software people trust.
+	</h1>
+</div>
 
-	<div
-		class="absolute bottom-6 left-[var(--spacing-gutter)] font-mono text-[11px] uppercase tracking-[0.12em] [writing-mode:vertical-rl] rotate-180"
-	>
-		Scroll to explore
+<Section>
+	<div class="prose measure">
+		<p>
+			I work on compliance and legal technology for firms that can't afford to
+			get it wrong. Currently co-founder and Head of Engineering at <a
+				href="https://forsyteco.com"
+				target="_blank"
+				rel="noreferrer">Forsyte</a
+			>, where we're rethinking how law firms manage risk.
+		</p>
+		<p>
+			My focus is engineering rigour paired with product instinct — systems that
+			are dependable, legible, and genuinely useful to the people who rely on
+			them. Based in Bristol, UK.
+		</p>
 	</div>
-</section>
+</Section>

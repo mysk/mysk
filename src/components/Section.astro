@@ -1,0 +1,15 @@
+---
+interface Props {
+	label?: string;
+	id?: string;
+}
+
+const { label, id } = Astro.props;
+---
+
+<section id={id} class="section scroll-mt-8">
+	{label ? <h2 class="label">{label}</h2> : <div class="hidden md:block" />}
+	<div>
+		<slot />
+	</div>
+</section>

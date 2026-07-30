@@ -7,9 +7,10 @@ export default defineConfig({
 	site: "https://mysk.dev",
 	redirects: {
 		"/cv": "/julian-dawson-cv.pdf",
-		"/projects": "/#work",
-		"/links": "/#contact",
+		"/projects": "/#projects",
+		"/links": "/",
 		"/blog": "/#writing",
+		"/blog/[slug]": "/writing/[slug]",
 	},
 	vite: {
 		plugins: [tailwindcss()],

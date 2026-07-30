@@ -1,28 +1,54 @@
 ---
-const navItems = [
-	{ href: "/#work", label: "Work" },
-	{ href: "/#writing", label: "Writing" },
-	{ href: "/#about", label: "Approach" },
-	{ href: "/#contact", label: "Contact" },
-];
+import { getCollection } from "astro:content";
+
+interface Props {
+	breadcrumb?: { label: string; href: string };
+}
+
+const { breadcrumb } = Astro.props;
+
+const socials = (await getCollection("links")).sort(
+	(a, b) => (a.data.order ?? 999) - (b.data.order ?? 999)
+);
 ---
 
-<header
-	class="grid grid-cols-[1fr_auto] items-center border-b border-line px-[var(--spacing-gutter)] py-[18px]"
->
-	<a
-		href="/"
-		class="font-mono text-mono-label font-medium uppercase tracking-[0.09em] text-fg"
-	>
-		MYSK®
-	</a>
-	<nav class="flex gap-[18px]" aria-label="Primary navigation">
+<header class="section site-header">
+	<p class="flex items-baseline gap-2">
+		<a href="/" class="font-medium tracking-tight">Mysk</a>
 		{
-			navItems.map((item) => (
-				<a href={item.href} class="nav-link">
-					{item.label}
-				</a>
+			breadcrumb && (
+				<>
+					<span class="text-fg-dim" aria-hidden="true">
+						/
+					</span>
+					<a href={breadcrumb.href} class="link">
+						{breadcrumb.label}
+					</a>
+				</>
+			)
+		}
+	</p>
+
+	<ul
+		class="list md:col-start-3 md:items-end"
+		aria-label="Elsewhere"
+	>
+		{
+			socials.map((link) => (
+				<li>
+					<a
+						href={link.data.url}
+						class="link"
+						target="_blank"
+						rel="noreferrer"
+					>
+						{link.data.title}
+					</a>
+				</li>
 			))
 		}
-	</nav>
+		<li>
+			<a href="/julian-dawson-cv.pdf" class="link">CV (PDF 248kb)</a>
+		</li>
+	</ul>
 </header>
